@@ -483,13 +483,15 @@ function wantBracelet(name){
 /* =========================================================
    2) PARTÍCULAS DE FUNDO — bolhinhas e brilhos subindo
    ========================================================= */
-  function resize() {
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = Math.max(
-        document.body.scrollHeight,
-        document.documentElement.scrollHeight,
-        window.innerHeight
-    );
+ (function () {
+    const canvas = document.getElementById('bg-particles');
+    const ctx = canvas.getContext('2d');
+
+    let W, H;
+    let particles = [];
+
+    const prefersReduced =
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
   window.addEventListener('resize', resize);
   resize();
@@ -549,8 +551,9 @@ function wantBracelet(name){
   else ctx.clearRect(0,0,W,H);
 
   // recalcula altura quando a página carrega totalmente (imagens, fontes etc)
-  window.addEventListener('load', resize);
-();
+window.addEventListener('load', resize);
+
+})();
 
 /* =========================================================
    3) MENU MOBILE
