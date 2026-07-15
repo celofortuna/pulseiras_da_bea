@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Pulseiras da Bea 🧜‍♀️ — Feitas com amor e brilho de sereia!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink-deep:   #ff6fa5;
+    --pink-main:   #ff9ec7;
+    --pink-soft:   #ffd6e8;
+    --pink-cream:  #fff3f8;
+    --sand:        #ffe9c2;
+    --sand-line:   #f4c98a;
+    --sea:         #4fd3d9;
+    --sea-deep:    #2ab7c9;
+    --sun:         #ffd23f;
+    --ink:         #6a3b5c;
+    --white:       #ffffff;
+    --shadow: 0 10px 30px rgba(255, 111, 165, 0.25);
+    --radius-lg: 32px;
+    --radius-md: 22px;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    font-family:'Nunito', sans-serif;
+    color:var(--ink);
+    background: linear-gradient(180deg, var(--pink-cream) 0%, var(--pink-soft) 40%, var(--sand) 100%);
+    overflow-x:hidden;
+    position:relative;
+  }
+  h1,h2,h3,.display{ font-family:'Baloo 2', 'Nunito', sans-serif; }
+  img{ max-width:100%; display:block; }
+  button{ font-family:inherit; cursor:pointer; }
+  a{ color:inherit; }
+  ::selection{ background:var(--sun); color:var(--ink); }
+
+  /* respeita quem prefere menos movimento */
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+  }
+
+  /* ---------- particulas de fundo (canvas) ---------- */
+  #bg-particles{
+    position:fixed; inset:0; width:100%; height:100%;
+    z-index:0; pointer-events:none;
+  }
+
+  .page{ position:relative; z-index:1; }
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 5vw;
+    background:rgba(255,243,248,0.85);
+    backdrop-filter:blur(8px);
+    border-bottom:3px dashed var(--pink-main);
+  }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand svg{ width:52px; height:52px; }
+  .brand-name{ font-size:1.3rem; font-weight:800; color:var(--pink-deep); line-height:1.05; }
+  .brand-sub{ font-size:0.7rem; font-weight:700; color:var(--sea-deep); letter-spacing:0.5px; }
+
+  nav{ display:flex; gap:8px; }
+  nav a{
+    text-decoration:none; font-weight:800; color:var(--ink);
+    background:var(--white); padding:9px 16px; border-radius:999px;
+    font-size:0.85rem; box-shadow:0 4px 0 var(--pink-soft);
+    transition:transform .15s ease;
+    white-space:nowrap;
+  }
+  nav a:hover{ transform:translateY(-2px); background:var(--sun); }
+
+  .nav-toggle{ display:none; }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    padding:60px 6vw 120px;
+    display:flex; align-items:center; justify-content:space-between; gap:40px;
+    flex-wrap:wrap;
+  }
+  .hero-text{ flex:1 1 380px; }
+  .eyebrow{
+    display:inline-block; background:var(--sun); color:var(--ink);
+    font-weight:800; padding:6px 16px; border-radius:999px; font-size:0.85rem;
+    box-shadow:var(--shadow); transform:rotate(-3deg); margin-bottom:14px;
+  }
+  .hero h1{
+    font-size:clamp(2.1rem, 5vw, 3.4rem); line-height:1.05; color:var(--pink-deep);
+    margin:0 0 16px; text-shadow:2px 2px 0 var(--white);
+  }
+  .hero h1 span{ color:var(--sea-deep); }
+  .hero p{ font-size:1.15rem; max-width:480px; margin:0 0 26px; font-weight:700; color:var(--ink); }
+  .cta-row{ display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{
+    border:none; border-radius:999px; padding:16px 30px; font-weight:800; font-size:1.05rem;
+    box-shadow:0 6px 0 rgba(0,0,0,0.12); transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:active{ transform:translateY(4px); box-shadow:0 2px 0 rgba(0,0,0,0.12); }
+  .btn-primary{ background:var(--pink-deep); color:var(--white); }
+  .btn-primary:hover{ transform:translateY(-3px); }
+  .btn-secondary{ background:var(--white); color:var(--pink-deep); }
+  .btn-secondary:hover{ transform:translateY(-3px); }
+
+  .hero-art{ flex:1 1 320px; display:flex; justify-content:center; }
+  .hero-art svg{ width:100%; max-width:420px; filter:drop-shadow(0 18px 20px rgba(255,111,165,0.35)); }
+  .hero-logo{
+    width:100%; max-width:400px;
+    filter:drop-shadow(0 18px 24px rgba(255,111,165,0.35));
+    animation:float-logo 4.5s ease-in-out infinite;
+  }
+  @keyframes float-logo{
+    0%,100%{ transform:translateY(0) rotate(-1deg); }
+    50%{ transform:translateY(-14px) rotate(1deg); }
+  }
+
+  .wave-divider{ position:absolute; left:0; right:0; bottom:-2px; line-height:0; }
+  .wave-divider svg{ width:100%; height:auto; display:block; }
+
+  /* ---------- secoes gerais ---------- */
+  section{ padding:70px 6vw; position:relative; }
+  .section-head{ text-align:center; max-width:640px; margin:0 auto 44px; }
+  .section-head .eyebrow{ transform:rotate(2deg); }
+  .section-head h2{ font-size:clamp(1.8rem, 4vw, 2.6rem); color:var(--pink-deep); margin:10px 0 12px; }
+  .section-head p{ font-size:1.05rem; font-weight:700; margin:0; }
+
+  /* ---------- historia da Bea ---------- */
+  .story{ background:var(--white); border-radius:var(--radius-lg); box-shadow:var(--shadow); }
+  .story-wrap{
+    display:flex; gap:40px; align-items:center; flex-wrap:wrap-reverse;
+    max-width:1100px; margin:0 auto;
+  }
+  .story-art{ flex:1 1 280px; text-align:center; }
+  .story-art svg{ width:100%; max-width:280px; margin:0 auto; }
+  .story-text{ flex:2 1 420px; }
+  .story-text h2{ color:var(--pink-deep); font-size:clamp(1.6rem,3.6vw,2.2rem); margin-top:0; }
+  .story-text p{ font-size:1.08rem; line-height:1.7; font-weight:600; }
+  .story-text strong{ color:var(--sea-deep); }
+  .signature{ font-family:'Baloo 2'; font-size:1.4rem; color:var(--pink-deep); margin-top:18px; }
+
+  /* ---------- catalogo ---------- */
+  .catalog-grid{
+    display:grid; gap:26px;
+    grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));
+    max-width:1180px; margin:0 auto;
+  }
+  .card{
+    background:var(--white); border-radius:var(--radius-md); overflow:hidden;
+    box-shadow:var(--shadow); display:flex; flex-direction:column;
+    transition:transform .2s ease;
+    border:3px solid var(--pink-soft);
+  }
+  .card:hover{ transform:translateY(-6px) rotate(-1deg); }
+  .card-media{
+    aspect-ratio:1/1; width:100%;
+    display:flex; align-items:center; justify-content:center;
+    position:relative; overflow:hidden;
+  }
+  .card-media img{ width:100%; height:100%; object-fit:cover; }
+  .card-badge{
+    position:absolute; top:10px; left:10px; background:var(--sun); color:var(--ink);
+    font-weight:800; font-size:0.72rem; padding:4px 10px; border-radius:999px;
+    box-shadow:0 3px 0 rgba(0,0,0,0.1);
+  }
+  .card-body{ padding:16px 18px 20px; display:flex; flex-direction:column; gap:8px; flex:1; }
+  .card-body h3{ margin:0; font-size:1.15rem; color:var(--pink-deep); }
+  .card-body .desc{ font-size:0.88rem; font-weight:600; color:var(--ink); opacity:0.85; margin:0; min-height:38px; }
+  .card-footer{ display:flex; align-items:center; justify-content:space-between; margin-top:auto; }
+  .price{ font-family:'Baloo 2'; font-weight:800; color:var(--sea-deep); font-size:1.25rem; }
+  .buy-btn{
+    background:var(--pink-deep); color:var(--white); border:none; border-radius:999px;
+    padding:9px 16px; font-weight:800; font-size:0.85rem; box-shadow:0 4px 0 rgba(0,0,0,0.12);
+  }
+  .buy-btn:active{ transform:translateY(3px); box-shadow:none; }
+
+  .catalog-note{
+    text-align:center; margin:34px auto 0; max-width:560px; font-weight:700; font-size:0.95rem;
+    background:var(--sand); border:2px dashed var(--sand-line); border-radius:16px; padding:14px 18px;
+  }
+
+  /* ---------- minigame ---------- */
+  .game-section{ background:linear-gradient(180deg, var(--sea) 0%, var(--sea-deep) 100%); border-radius:var(--radius-lg); color:var(--white); position:relative; overflow:hidden; }
+  .game-section .section-head p{ color:#eafcff; }
+  .game-section .eyebrow{ background:var(--sun); }
+  .game-wrap{ max-width:760px; margin:0 auto; position:relative; }
+  .game-hud{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
+    margin-bottom:14px;
+  }
+  .hud-pill{
+    background:rgba(255,255,255,0.18); border:2px solid rgba(255,255,255,0.4);
+    padding:8px 18px; border-radius:999px; font-weight:800; font-size:0.95rem;
+  }
+  #game-area{
+    position:relative; width:100%; height:min(60vh, 460px);
+    background:linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.02));
+    border-radius:24px; border:3px solid rgba(255,255,255,0.5);
+    overflow:hidden; touch-action:none; cursor:pointer;
+  }
+  .mermaid-guide{
+    position:absolute; bottom:8px; left:50%; transform:translateX(-50%);
+    width:110px; z-index:5; pointer-events:none; transition:transform .15s ease;
+  }
+  .bubble{
+    position:absolute; border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, rgba(255,255,255,0.95), rgba(255,255,255,0.15) 60%, rgba(255,255,255,0.35));
+    border:2px solid rgba(255,255,255,0.8);
+    box-shadow:0 0 10px rgba(255,255,255,0.5) inset;
+    will-change:transform;
+  }
+  .game-controls{ display:flex; justify-content:center; gap:14px; margin-top:18px; }
+  .game-msg{ text-align:center; font-weight:800; margin-top:10px; min-height:26px; font-size:1.05rem; }
+
+  /* ---------- sobre / footer ---------- */
+  footer{
+    position:relative; padding:60px 6vw 30px; text-align:center;
+    background:var(--pink-deep); color:var(--white); margin-top:40px;
+  }
+  footer h3{ font-size:1.5rem; margin-bottom:6px; }
+  footer p{ font-weight:700; opacity:0.9; max-width:480px; margin:0 auto 18px; }
+  .foot-emojis{ font-size:1.6rem; letter-spacing:10px; margin-top:14px; }
+  .foot-wave{ position:absolute; top:-2px; left:0; right:0; line-height:0; transform:rotate(180deg); }
+
+  /* ---------- responsivo ---------- */
+  @media (max-width: 760px){
+    nav{
+      position:fixed; top:0; right:0; height:100%; width:70%; max-width:280px;
+      background:var(--pink-cream); flex-direction:column; padding:90px 24px 24px;
+      transform:translateX(100%); transition:transform .25s ease; box-shadow:-8px 0 30px rgba(0,0,0,0.15);
+    }
+    nav.open{ transform:translateX(0); }
+    nav a{ text-align:center; }
+    .nav-toggle{
+      display:flex; flex-direction:column; gap:5px; background:var(--pink-deep); border:none;
+      border-radius:10px; padding:10px 12px; z-index:60;
+    }
+    .nav-toggle span{ width:22px; height:3px; background:var(--white); border-radius:3px; }
+    .hero{ padding-bottom:90px; text-align:center; justify-content:center; }
+    .hero p{ margin-left:auto; margin-right:auto; }
+    .cta-row{ justify-content:center; }
+    section{ padding:50px 5vw; }
+    .story{ padding:8px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bg-particles"></canvas>
+
+<div class="page">
+
+  <!-- ===================== HEADER ===================== -->
+  <header>
+    <div class="brand">
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="48" fill="#fff3f8"/>
+        <path d="M20 62 C30 55, 40 55, 50 62 C60 69, 70 69, 80 62" stroke="#4fd3d9" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <!-- sereia mãe -->
+        <circle cx="35" cy="34" r="7" fill="#ffd6b0"/>
+        <path d="M35 41 Q30 50 34 60 Q38 55 42 60 Q46 50 35 41 Z" fill="#ff6fa5"/>
+        <!-- sereia bebê -->
+        <circle cx="58" cy="42" r="5" fill="#ffd6b0"/>
+        <path d="M58 47 Q54 53 57 60 Q60 56 63 60 Q66 53 58 47 Z" fill="#ffd23f"/>
+      </svg>
+      <div>
+        <div class="brand-name">Pulseiras da Bea</div>
+        <div class="brand-sub">🐚 FEITO COM AMOR NO PARQUINHO 🐚</div>
+      </div>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="mainNav">
+      <a href="#inicio">Início</a>
+      <a href="#historia">A Bea</a>
+      <a href="#catalogo">Catálogo</a>
+      <a href="#jogo">Joguinho</a>
+    </nav>
+  </header>
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero" id="inicio" style="padding-top:40px;">
+    <div class="hero-text">
+      <span class="eyebrow">✨ Direto do parquinho para você! ✨</span>
+      <h1>Pulseiras lindas<br>feitas com <span>brilho</span><br>de sereia 🧜‍♀️</h1>
+      <p>Cada pulseirinha é feita com muito carinho pela Bea, pensando em deixar seu pulso mais colorido e brilhante, igualzinho ao fundo do mar!</p>
+      <div class="cta-row">
+        <button class="btn btn-primary" onclick="document.getElementById('catalogo').scrollIntoView()">Ver as pulseiras 🌸</button>
+        <button class="btn btn-secondary" onclick="document.getElementById('jogo').scrollIntoView()">Estourar bolhinhas 🫧</button>
+      </div>
+    </div>
+    <div class="hero-art">
+      <img src="https://res.cloudinary.com/daorgqz6p/image/upload/v1784130758/Logomarca_da_Bea_Pulseiras_Sereia_1_u12m9b.png" alt="Logomarca da Bea Pulseiras - família de sereias" class="hero-logo">
+    </div>
+    <div class="wave-divider">
+      <svg viewBox="0 0 1440 120" preserveAspectRatio="none"><path fill="#ffffff" d="M0,64 C240,120 480,0 720,32 C960,64 1200,120 1440,64 L1440,120 L0,120 Z"></path></svg>
+    </div>
+  </section>
+
+  <!-- ===================== HISTORIA ===================== -->
+  <section id="historia">
+    <div class="story">
+      <div class="story-wrap" style="padding:44px 6vw;">
+        <div class="story-art">
+          <img src="https://res.cloudinary.com/daorgqz6p/image/upload/v1784131401/IMG_9750_xh0lwl.jpg" alt="Foto da Beatriz Fortuna" class="story-photo">
+        </div>
+        <div class="story-text">
+          <span class="eyebrow">💗 A historinha da nossa lojinha 💗</span>
+          <h2>Quem é a Beatriz Fortuna?</h2>
+          <p>Oi! Eu sou a <strong>Beatriz Fortuna</strong> e eu <strong>amo</strong> usar pulseiras! Eu também adoro fazer pulseiras coloridas para as minhas amigas do parquinho, para que todo mundo fique brilhando igual sereia! 🧜‍♀️</p>
+          <p>No começo, quando eu dava minhas pulseiras de presente, eu ficava um pouquinho triste porque ficava sem nenhuma pra mim! Foi aí que eu tive uma ideia genial: e se eu <strong>vendesse</strong> as minhas pulseiras?</p>
+          <p>Assim, todo mundo pode ter uma pulseira linda, e eu ainda ganho moedinhas para comprar coisas legais, como <strong>docinhos</strong> e <strong>brinquedos novos</strong>! É um negócio em que todo mundo sai feliz. 🍬🎈</p>
+          <p class="signature">Com carinho, Bea 🐚</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CATALOGO ===================== -->
+  <section id="catalogo">
+    <div class="section-head">
+      <span class="eyebrow">🌈 Catálogo da Bea 🌈</span>
+      <h2>Escolha a sua pulseirinha!</h2>
+      <p>Todas feitas à mão, com muito capricho e brilho de sereia. Escolha a sua cor favorita! 🐬</p>
+    </div>
+    <div class="catalog-grid" id="catalogGrid"><!-- cards gerados via JS --></div>
+    <p class="catalog-note">🐚 Psiu! Peça para um adulto ajudar você a fazer o pedido, combinado? 🐚</p>
+  </section>
+
+  <!-- ===================== MINIGAME ===================== -->
+  <section id="jogo" class="game-section">
+    <div class="section-head">
+      <span class="eyebrow">🫧 Joguinho da Sereia 🫧</span>
+      <h2 style="color:#fff;">Ajude a sereia a estourar as bolhinhas!</h2>
+      <p>Toque ou clique nas bolhinhas antes que elas fujam para a superfície!</p>
+    </div>
+    <div class="game-wrap">
+      <div class="game-hud">
+        <div class="hud-pill">⭐ Pontos: <span id="score">0</span></div>
+        <div class="hud-pill">⏱️ Tempo: <span id="timeLeft">30</span>s</div>
+      </div>
+      <div id="game-area">
+        <svg class="mermaid-guide" id="mermaidGuide" viewBox="0 0 120 140" aria-hidden="true">
+          <circle cx="60" cy="34" r="20" fill="#ffd6b0"/>
+          <path d="M42 24 Q60 5 82 22 Q88 8 65 2 Q35 -2 38 30 Q40 30 42 24Z" fill="#ff6fa5"/>
+          <circle cx="52" cy="34" r="3" fill="#6a3b5c"/>
+          <circle cx="68" cy="34" r="3" fill="#6a3b5c"/>
+          <path d="M50 46 Q60 53 70 46" stroke="#6a3b5c" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M30 58 L90 58 L100 118 Q60 145 20 118 Z" fill="#ff6fa5"/>
+          <path d="M40 130 Q60 150 80 130 Q92 138 80 150 Q60 158 40 150 Q28 138 40 130Z" fill="#ff9ec7"/>
+        </svg>
+      </div>
+      <div class="game-msg" id="gameMsg">Toque em "Começar" e ajude a sereia! 🐬</div>
+      <div class="game-controls">
+        <button class="btn btn-primary" id="startGame" style="background:var(--sun); color:var(--ink);">Começar 🎮</button>
+        <button class="btn btn-secondary" id="resetGame">Reiniciar 🔄</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer>
+    <div class="foot-wave">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path fill="#ff6fa5" d="M0,64 C240,10 480,90 720,50 C960,10 1200,90 1440,40 L1440,0 L0,0 Z"></path></svg>
+    </div>
+    <h3>Pulseiras da Bea 🧜‍♀️</h3>
+    <p>Uma lojinha pequena, feita com o coração de uma menina que sonha grande. Obrigada por apoiar o meu sonho de empreendedora!</p>
+    <div class="foot-emojis">🐚 🌊 🩷 ⭐ 🫧</div>
+  </footer>
+
+</div>
+
+<script>
+/* =========================================================
+   1) CATÁLOGO — para adicionar uma nova pulseira, é só
+      copiar um objeto do array abaixo e editar os campos.
+      "img" pode ser uma URL de foto real da pulseira;
+      se ficar vazio (""), aparece um desenho bonitinho no lugar.
+   ========================================================= */
+const bracelets = [
+  {
+    name: "Concha Rosa",
+    desc: "Miçangas rosa e branquinhas, igual espuma do mar.",
+    price: "R$ 8,00",
+    badge: "Mais amada 💗",
+    img: "",
+    colors: ["#ff9ec7", "#ffd6e8", "#ffffff"]
+  },
+  {
+    name: "Estrela do Mar",
+    desc: "Amarela e laranjinha, brilha que nem sol na praia.",
+    price: "R$ 8,00",
+    badge: "",
+    img: "",
+    colors: ["#ffd23f", "#ffb347", "#fff3f8"]
+  },
+  {
+    name: "Arco-Íris da Sereia",
+    desc: "Todas as cores juntas, para brilhar de todo jeito!",
+    price: "R$ 10,00",
+    badge: "Edição especial 🌈",
+    img: "",
+    colors: ["#ff6fa5", "#ffd23f", "#4fd3d9", "#ff9ec7"]
+  },
+  {
+    name: "Ondinha Azul",
+    desc: "Azul e turquesa, igualzinho ao mar de verdade.",
+    price: "R$ 8,00",
+    badge: "",
+    img: "",
+    colors: ["#4fd3d9", "#2ab7c9", "#ffffff"]
+  },
+  {
+    name: "Coração de Areia",
+    desc: "Bege e rosa clarinho, com um coração no meio.",
+    price: "R$ 9,00",
+    badge: "",
+    img: "",
+    colors: ["#ffe9c2", "#ff9ec7", "#ffffff"]
+  },
+  {
+    name: "Golfinho Feliz",
+    desc: "Cinza clarinho e azul, com um golfinho pulando.",
+    price: "R$ 9,00",
+    badge: "Novidade ✨",
+    img: "",
+    colors: ["#bcdff2", "#4fd3d9", "#ffffff"]
+  }
+];
+
+const grid = document.getElementById('catalogGrid');
+
+function braceletVisual(item){
+  // se tiver uma foto (img), usa a foto. Senão, desenha miçangas coloridas.
+  if(item.img){
+    return `<img src="${item.img}" alt="Foto da pulseira ${item.name}">`;
+  }
+  const beads = item.colors.map((c,i)=>`<circle cx="${30 + i*40}" cy="100" r="16" fill="${c}" stroke="#ffffff" stroke-width="3"/>`).join('');
+  const beadsRepeat = item.colors.concat(item.colors).map((c,i)=>`<circle cx="${20 + i*24}" cy="100" r="11" fill="${c}" stroke="#ffffff" stroke-width="2.5"/>`).join('');
+  return `<svg viewBox="0 0 220 220" style="width:70%;height:70%;">
+      <circle cx="110" cy="110" r="100" fill="#fff3f8"/>
+      <path d="M40 110 A70 70 0 1 1 180 110" stroke="#ffb6d5" stroke-width="14" fill="none" stroke-linecap="round"/>
+      ${item.colors.map((c,i)=>{
+        const angle = Math.PI * (0.15 + i*(0.7/(item.colors.length-1||1)));
+        const x = 110 - Math.cos(angle)*72;
+        const y = 110 - Math.sin(angle)*72;
+        return `<circle cx="${x}" cy="${y}" r="13" fill="${c}" stroke="#fff" stroke-width="3"/>`;
+      }).join('')}
+    </svg>`;
+}
+
+function renderCatalog(){
+  grid.innerHTML = bracelets.map(item => `
+    <article class="card">
+      <div class="card-media" style="background:linear-gradient(160deg, var(--pink-soft), #fff);">
+        ${item.badge ? `<span class="card-badge">${item.badge}</span>` : ""}
+        ${braceletVisual(item)}
+      </div>
+      <div class="card-body">
+        <h3>Pulseira ${item.name}</h3>
+        <p class="desc">${item.desc}</p>
+        <div class="card-footer">
+          <span class="price">${item.price}</span>
+          <button class="buy-btn" onclick="wantBracelet('${item.name.replace(/'/g,"\\'")}')">Eu quero! 🛍️</button>
+        </div>
+      </div>
+    </article>
+  `).join('');
+}
+renderCatalog();
+
+function wantBracelet(name){
+  alert("Que legal! 💗 Peça para um adulto entrar em contato com a Bea para combinar a pulseira \\"" + name + "\\"!");
+}
+
+/* =========================================================
+   2) PARTÍCULAS DE FUNDO — bolhinhas e brilhos subindo
+   ========================================================= */
+(function(){
+  const canvas = document.getElementById('bg-particles');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function resize(){
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = document.documentElement.scrollHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  const COUNT = prefersReduced ? 0 : Math.min(60, Math.floor(W/22));
+
+  function makeParticle(){
+    const isSparkle = Math.random() < 0.35;
+    return {
+      x: Math.random()*W,
+      y: Math.random()*H,
+      r: isSparkle ? 1.5 + Math.random()*2 : 3 + Math.random()*9,
+      speed: 0.25 + Math.random()*0.6,
+      drift: (Math.random()-0.5)*0.5,
+      sparkle: isSparkle,
+      alpha: 0.25 + Math.random()*0.45,
+      hue: isSparkle ? '255,214,63' : '255,255,255'
+    };
+  }
+  for(let i=0;i<COUNT;i++) particles.push(makeParticle());
+
+  function step(){
+    ctx.clearRect(0,0,W,H);
+    for(const p of particles){
+      ctx.beginPath();
+      ctx.fillStyle = `rgba(${p.hue},${p.alpha})`;
+      if(p.sparkle){
+        // brilho tipo estrelinha
+        ctx.save();
+        ctx.translate(p.x,p.y);
+        ctx.rotate(p.y*0.01);
+        for(let a=0;a<4;a++){
+          ctx.rotate(Math.PI/2);
+          ctx.beginPath();
+          ctx.moveTo(0,0);
+          ctx.lineTo(p.r*2.4,0);
+          ctx.lineTo(0,p.r*0.5);
+          ctx.closePath();
+          ctx.fill();
+        }
+        ctx.restore();
+      } else {
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.fillStyle = `rgba(255,255,255,${p.alpha*0.6})`;
+        ctx.fill();
+      }
+      p.y -= p.speed;
+      p.x += p.drift;
+      if(p.y < -20){ p.y = H + 20; p.x = Math.random()*W; }
+    }
+    if(!prefersReduced) requestAnimationFrame(step);
+  }
+  if(!prefersReduced) requestAnimationFrame(step);
+  else ctx.clearRect(0,0,W,H);
+
+  // recalcula altura quando a página carrega totalmente (imagens, fontes etc)
+  window.addEventListener('load', resize);
+})();
+
+/* =========================================================
+   3) MENU MOBILE
+   ========================================================= */
+const navToggle = document.getElementById('navToggle');
+const mainNav = document.getElementById('mainNav');
+navToggle.addEventListener('click', ()=> mainNav.classList.toggle('open'));
+mainNav.querySelectorAll('a').forEach(a => a.addEventListener('click', ()=> mainNav.classList.remove('open')));
+
+/* =========================================================
+   4) MINIGAME — estourar bolhinhas com a sereia
+   ========================================================= */
+(function(){
+  const area = document.getElementById('game-area');
+  const scoreEl = document.getElementById('score');
+  const timeEl = document.getElementById('timeLeft');
+  const msgEl = document.getElementById('gameMsg');
+  const startBtn = document.getElementById('startGame');
+  const resetBtn = document.getElementById('resetGame');
+  const mermaid = document.getElementById('mermaidGuide');
+
+  let score = 0, timeLeft = 30, running = false, spawnTimer = null, countdownTimer = null, bubbles = [];
+
+  function randRange(a,b){ return a + Math.random()*(b-a); }
+
+  function spawnBubble(){
+    const size = randRange(30, 62);
+    const b = document.createElement('div');
+    b.className = 'bubble';
+    b.style.width = size+'px';
+    b.style.height = size+'px';
+    const areaW = area.clientWidth;
+    const startX = randRange(6, areaW - size - 6);
+    b.style.left = startX + 'px';
+    b.style.top = area.clientHeight + size + 'px';
+    area.appendChild(b);
+
+    const duration = randRange(3200, 5600);
+    const drift = randRange(-40, 40);
+    const startTime = performance.now();
+
+    function animate(now){
+      const t = (now - startTime) / duration;
+      if(t >= 1 || !b.isConnected){ b.remove(); return; }
+      const y = area.clientHeight + size - t * (area.clientHeight + size * 2);
+      const x = startX + Math.sin(t*Math.PI*2) * (drift*0.3) + drift*t;
+      b.style.transform = `translate(${x-startX}px, ${y-(area.clientHeight+size)}px)`;
+      b.__raf = requestAnimationFrame(animate);
+    }
+    b.__raf = requestAnimationFrame(animate);
+
+    function pop(e){
+      if(e) e.stopPropagation();
+      if(!b.isConnected) return;
+      cancelAnimationFrame(b.__raf);
+      score++;
+      scoreEl.textContent = score;
+      mermaid.style.transform = 'translateX(-50%) scale(1.15)';
+      setTimeout(()=> mermaid.style.transform = 'translateX(-50%) scale(1)', 140);
+      b.style.transition = 'transform .18s ease, opacity .18s ease';
+      b.style.transform += ' scale(1.6)';
+      b.style.opacity = '0';
+      setTimeout(()=> b.remove(), 180);
+    }
+    b.addEventListener('click', pop);
+    b.addEventListener('touchstart', pop, {passive:true});
+    bubbles.push(b);
+  }
+
+  function tickSpawn(){
+    if(!running) return;
+    spawnBubble();
+    spawnTimer = setTimeout(tickSpawn, randRange(450, 900));
+  }
+
+  function startGame(){
+    if(running) return;
+    running = true;
+    score = 0; timeLeft = 30;
+    scoreEl.textContent = score;
+    timeEl.textContent = timeLeft;
+    msgEl.textContent = 'Vai, vai! Estoure as bolhinhas! 🫧';
+    area.querySelectorAll('.bubble').forEach(b=>b.remove());
+    tickSpawn();
+    countdownTimer = setInterval(()=>{
+      timeLeft--;
+      timeEl.textContent = timeLeft;
+      if(timeLeft <= 0) endGame();
+    }, 1000);
+  }
+
+  function endGame(){
+    running = false;
+    clearTimeout(spawnTimer);
+    clearInterval(countdownTimer);
+    area.querySelectorAll('.bubble').forEach(b=>{ cancelAnimationFrame(b.__raf); b.remove(); });
+    msgEl.textContent = `Tempo! Você estourou ${score} bolhinhas! A sereia adorou! 🧜‍♀️💖`;
+  }
+
+  function resetGame(){
+    running = false;
+    clearTimeout(spawnTimer);
+    clearInterval(countdownTimer);
+    area.querySelectorAll('.bubble').forEach(b=>{ cancelAnimationFrame(b.__raf); b.remove(); });
+    score = 0; timeLeft = 30;
+    scoreEl.textContent = score;
+    timeEl.textContent = timeLeft;
+    msgEl.textContent = 'Toque em "Começar" e ajude a sereia! 🐬';
+  }
+
+  startBtn.addEventListener('click', startGame);
+  resetBtn.addEventListener('click', resetGame);
+})();
+</script>
+</body>
+</html>
