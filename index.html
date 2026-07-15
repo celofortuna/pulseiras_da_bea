@@ -483,16 +483,15 @@ function wantBracelet(name){
 /* =========================================================
    2) PARTÍCULAS DE FUNDO — bolhinhas e brilhos subindo
    ========================================================= */
-(function(){
-  const canvas = document.getElementById('bg-particles');
-  const ctx = canvas.getContext('2d');
-  let W, H, particles = [];
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function resize(){
+(function()
+  function resize() {
     W = canvas.width = window.innerWidth;
-    H = canvas.height = document.documentElement.scrollHeight;
-  }
+    H = canvas.height = Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight,
+        window.innerHeight
+    );
+}
   window.addEventListener('resize', resize);
   resize();
 
