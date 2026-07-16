@@ -55,15 +55,14 @@
 
   /* ---------- header ---------- */
   header{
-    position:sticky; top:0; z-index:50;
+    position:sticky; top:0; z-index:39;
     display:flex; align-items:center; justify-content:space-between;
     padding:14px 5vw;
-    background:rgba(255,243,248,0.85);
-    backdrop-filter:blur(8px);
+    background:rgba(255,243,248,0.97);
     border-bottom:3px dashed var(--pink-main);
   }
   .brand{ display:flex; align-items:center; gap:12px; }
-  .brand img{ width:52px; height:52px; }
+  .brand img{ width:52px; height:52px; object-fit:contain; }
   .brand-name{ font-size:1.3rem; font-weight:800; color:var(--pink-deep); line-height:1.05; }
   .brand-sub{ font-size:0.7rem; font-weight:700; color:var(--sea-deep); letter-spacing:0.5px; }
 
@@ -85,6 +84,7 @@
     padding:60px 6vw 120px;
     display:flex; align-items:center; justify-content:space-between; gap:40px;
     flex-wrap:wrap;
+    max-width:1320px; margin:0 auto;
   }
   .hero-text{ flex:1 1 380px; }
   .eyebrow{
@@ -124,6 +124,25 @@
   .wave-divider{ position:absolute; left:0; right:0; bottom:-2px; line-height:0; }
   .wave-divider svg{ width:100%; height:auto; display:block; }
 
+  /* ---------- desktop: forçar lado a lado (evita quebra por flex-wrap) ---------- */
+  @media (min-width: 761px){
+    .hero{
+      display:grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      align-items:center;
+      gap:56px;
+      text-align:left;
+    }
+    .hero-text{ max-width:none; }
+    .hero-art{ justify-content:center; }
+    .story-wrap{
+      display:grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      align-items:center;
+      gap:56px;
+    }
+  }
+
   /* ---------- secoes gerais ---------- */
   section{ padding:70px 6vw; position:relative; }
   .section-head{ text-align:center; max-width:640px; margin:0 auto 44px; }
@@ -139,6 +158,11 @@
   }
   .story-art{ flex:1 1 280px; text-align:center; }
   .story-art svg{ width:100%; max-width:280px; margin:0 auto; }
+  .story-photo{
+    width:100%; max-width:280px; margin:0 auto; border-radius:24px;
+    box-shadow:var(--shadow); border:5px solid var(--white); outline:3px solid var(--pink-soft);
+    object-fit:cover; aspect-ratio:4/5;
+  }
   .story-text{ flex:2 1 420px; }
   .story-text h2{ color:var(--pink-deep); font-size:clamp(1.6rem,3.6vw,2.2rem); margin-top:0; }
   .story-text p{ font-size:1.08rem; line-height:1.7; font-weight:600; }
@@ -228,20 +252,57 @@
   .foot-emojis{ font-size:1.6rem; letter-spacing:10px; margin-top:14px; }
   .foot-wave{ position:absolute; top:-2px; left:0; right:0; line-height:0; transform:rotate(180deg); }
 
+  /* ---------- menu overlay (escurece o fundo quando o menu mobile abre) ---------- */
+  .nav-overlay{
+    position:fixed; inset:0; height:100vh; height:100dvh;
+    background:rgba(106,59,92,0.45);
+    backdrop-filter:blur(2px);
+    opacity:0; pointer-events:none;
+    transition:opacity .25s ease;
+    z-index:40;
+  }
+  .nav-overlay.open{ opacity:1; pointer-events:auto; }
+
   /* ---------- responsivo ---------- */
   @media (max-width: 760px){
     nav{
-      position:fixed; top:0; right:0; height:100%; width:70%; max-width:280px;
-      background:var(--pink-cream); flex-direction:column; padding:90px 24px 24px;
-      transform:translateX(100%); transition:transform .25s ease; box-shadow:-8px 0 30px rgba(0,0,0,0.15);
+      position:fixed; top:0; right:0; height:100vh; height:100dvh; width:78%; max-width:300px;
+      background:var(--pink-cream);
+      background-image:linear-gradient(180deg, var(--pink-cream) 0%, var(--pink-soft) 100%);
+      flex-direction:column; align-items:stretch; gap:12px;
+      padding:100px 22px 24px;
+      overflow-y:auto;
+      transform:translateX(100%); transition:transform .3s ease;
+      box-shadow:-12px 0 40px rgba(106,59,92,0.35);
+      z-index:950;
+      border-left:4px solid var(--white);
     }
     nav.open{ transform:translateX(0); }
-    nav a{ text-align:center; }
-    .nav-toggle{
-      display:flex; flex-direction:column; gap:5px; background:var(--pink-deep); border:none;
-      border-radius:10px; padding:10px 12px; z-index:60;
+    nav a{
+      text-align:center; padding:14px 16px; font-size:1rem;
+      box-shadow:0 4px 0 var(--pink-main); background:var(--white);
     }
-    .nav-toggle span{ width:22px; height:3px; background:var(--white); border-radius:3px; }
+    nav a:hover, nav a:active{ background:var(--sun); }
+
+    .nav-toggle{
+      display:flex; flex-direction:column; justify-content:center; align-items:center; gap:5px;
+      background:var(--pink-deep); border:none; width:44px; height:44px;
+      border-radius:12px; padding:0; z-index:960; position:relative;
+      box-shadow:0 4px 0 rgba(0,0,0,0.15);
+    }
+    .nav-toggle span{
+      width:22px; height:3px; background:var(--white); border-radius:3px;
+      transition:transform .25s ease, opacity .25s ease;
+    }
+    .nav-toggle.open span:nth-child(1){ transform:translateY(8px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2){ opacity:0; }
+    .nav-toggle.open span:nth-child(3){ transform:translateY(-8px) rotate(-45deg); }
+
+    .nav-close-label{
+      display:block; text-align:center; font-weight:800; color:var(--pink-deep);
+      font-size:0.75rem; letter-spacing:1px; margin-bottom:6px; opacity:0.7;
+    }
+
     .hero{ padding-bottom:90px; text-align:center; justify-content:center; }
     .hero p{ margin-left:auto; margin-right:auto; }
     .cta-row{ justify-content:center; }
@@ -259,17 +320,7 @@
   <!-- ===================== HEADER ===================== -->
   <header>
     <div class="brand">
-      <img src="https://res.cloudinary.com/daorgqz6p/image/upload/v1784130758/Logomarca_da_Bea_Pulseiras_Sereia_1_u12m9b.png">
-      <!-- <svg viewBox="0 0 100 100" aria-hidden="true">
-        <circle cx="50" cy="50" r="48" fill="#fff3f8"/>
-        <path d="M20 62 C30 55, 40 55, 50 62 C60 69, 70 69, 80 62" stroke="#4fd3d9" stroke-width="4" fill="none" stroke-linecap="round"/>
-        <!-- sereia mãe -->
-        <!-- <circle cx="35" cy="34" r="7" fill="#ffd6b0"/>
-        <path d="M35 41 Q30 50 34 60 Q38 55 42 60 Q46 50 35 41 Z" fill="#ff6fa5"/>
-        <!-- sereia bebê -->
-        <!-- <circle cx="58" cy="42" r="5" fill="#ffd6b0"/>
-        <path d="M58 47 Q54 53 57 60 Q60 56 63 60 Q66 53 58 47 Z" fill="#ffd23f"/>
-      </svg> -->
+      <img src="https://res.cloudinary.com/daorgqz6p/image/upload/v1784130758/Logomarca_da_Bea_Pulseiras_Sereia_1_u12m9b.png" alt="Logomarca Pulseiras da Bea">
       <div>
         <div class="brand-name">Pulseiras da Bea</div>
         <div class="brand-sub">🐚 FEITO COM AMOR 🐚</div>
@@ -279,12 +330,14 @@
       <span></span><span></span><span></span>
     </button>
     <nav id="mainNav">
+      <span class="nav-close-label">🐚 MENU 🐚</span>
       <a href="#inicio">Início</a>
       <a href="#historia">A Bea</a>
       <a href="#catalogo">Catálogo</a>
       <a href="#jogo">Joguinho</a>
     </nav>
   </header>
+  <div class="nav-overlay" id="navOverlay"></div>
 
   <!-- ===================== HERO ===================== -->
   <section class="hero" id="inicio" style="padding-top:40px;">
@@ -348,16 +401,7 @@
         <div class="hud-pill">⏱️ Tempo: <span id="timeLeft">30</span>s</div>
       </div>
       <div id="game-area">
-        <img src="https://res.cloudinary.com/daorgqz6p/image/upload/v1784171107/Logomarca_da_Bea_Pulseiras_Sereia_rtooev.png" class="mermaid-guide" id="mermaidGuide" aria-hidden="true">
-        <!--svg class="mermaid-guide" id="mermaidGuide" viewBox="0 0 120 140" aria-hidden="true">
-          <circle cx="60" cy="34" r="20" fill="#ffd6b0"/>
-          <path d="M42 24 Q60 5 82 22 Q88 8 65 2 Q35 -2 38 30 Q40 30 42 24Z" fill="#ff6fa5"/>
-          <circle cx="52" cy="34" r="3" fill="#6a3b5c"/>
-          <circle cx="68" cy="34" r="3" fill="#6a3b5c"/>
-          <path d="M50 46 Q60 53 70 46" stroke="#6a3b5c" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <path d="M30 58 L90 58 L100 118 Q60 145 20 118 Z" fill="#ff6fa5"/>
-          <path d="M40 130 Q60 150 80 130 Q92 138 80 150 Q60 158 40 150 Q28 138 40 130Z" fill="#ff9ec7"/>
-        </svg-->
+        <img src="https://res.cloudinary.com/daorgqz6p/image/upload/v1784171107/Logomarca_da_Bea_Pulseiras_Sereia_rtooev.png" class="mermaid-guide" id="mermaidGuide" alt="Sereia do joguinho">
       </div>
       <div class="game-msg" id="gameMsg">Toque em "Começar" e ajude a sereia! 🐬</div>
       <div class="game-controls">
@@ -444,8 +488,6 @@ function braceletVisual(item){
   if(item.img){
     return `<img src="${item.img}" alt="Foto da pulseira ${item.name}">`;
   }
-  const beads = item.colors.map((c,i)=>`<circle cx="${30 + i*40}" cy="100" r="16" fill="${c}" stroke="#ffffff" stroke-width="3"/>`).join('');
-  const beadsRepeat = item.colors.concat(item.colors).map((c,i)=>`<circle cx="${20 + i*24}" cy="100" r="11" fill="${c}" stroke="#ffffff" stroke-width="2.5"/>`).join('');
   return `<svg viewBox="0 0 220 220" style="width:70%;height:70%;">
       <circle cx="110" cy="110" r="100" fill="#fff3f8"/>
       <path d="M40 110 A70 70 0 1 1 180 110" stroke="#ffb6d5" stroke-width="14" fill="none" stroke-linecap="round"/>
@@ -497,20 +539,24 @@ function wantBracelet(name){
         window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     function resize() {
+        // O canvas é "position:fixed" (CSS: width/height 100%), então ele
+        // só ocupa a JANELA VISÍVEL (viewport) — nunca a página inteira.
+        // A resolução de desenho (canvas.width/height) precisa bater com
+        // essa área visível (window.innerWidth/innerHeight). Usar a altura
+        // de rolagem da página (scrollHeight) aqui fazia o navegador
+        // espremer o desenho inteiro dentro da telinha, encolhendo as
+        // bolhinhas até ficarem praticamente invisíveis.
         W = canvas.width = window.innerWidth;
-        H = canvas.height = Math.max(
-            document.body.scrollHeight,
-            document.documentElement.scrollHeight,
-            window.innerHeight
-        );
+        H = canvas.height = window.innerHeight;
+
+        // reposiciona as partículas dentro da nova área, se já existirem
+        particles.forEach(p => {
+            if (p.x > W) p.x = Math.random() * W;
+            if (p.y > H) p.y = Math.random() * H;
+        });
     }
 
     window.addEventListener("resize", resize);
-    window.addEventListener("load", resize);
-
-    resize();
-
-    const COUNT = prefersReduced ? 0 : Math.min(60, Math.floor(W / 22));
 
     function makeParticle() {
         const sparkle = Math.random() < 0.35;
@@ -526,9 +572,16 @@ function wantBracelet(name){
         };
     }
 
-    for (let i = 0; i < COUNT; i++) {
-        particles.push(makeParticle());
+    function initParticles() {
+        resize();
+        particles = [];
+        const COUNT = prefersReduced ? 0 : Math.min(60, Math.floor(W / 22));
+        for (let i = 0; i < COUNT; i++) {
+            particles.push(makeParticle());
+        }
     }
+
+    initParticles();
 
     function drawStar(x, y, r) {
         ctx.save();
@@ -595,8 +648,19 @@ function wantBracelet(name){
    ========================================================= */
 const navToggle = document.getElementById('navToggle');
 const mainNav = document.getElementById('mainNav');
-navToggle.addEventListener('click', ()=> mainNav.classList.toggle('open'));
-mainNav.querySelectorAll('a').forEach(a => a.addEventListener('click', ()=> mainNav.classList.remove('open')));
+const navOverlay = document.getElementById('navOverlay');
+
+function setNavOpen(isOpen){
+  mainNav.classList.toggle('open', isOpen);
+  navToggle.classList.toggle('open', isOpen);
+  navOverlay.classList.toggle('open', isOpen);
+  navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+}
+
+navToggle.addEventListener('click', ()=> setNavOpen(!mainNav.classList.contains('open')));
+navOverlay.addEventListener('click', ()=> setNavOpen(false));
+mainNav.querySelectorAll('a').forEach(a => a.addEventListener('click', ()=> setNavOpen(false)));
 
 /* =========================================================
    4) MINIGAME — estourar bolhinhas com a sereia
@@ -610,7 +674,7 @@ mainNav.querySelectorAll('a').forEach(a => a.addEventListener('click', ()=> main
   const resetBtn = document.getElementById('resetGame');
   const mermaid = document.getElementById('mermaidGuide');
 
-  let score = 0, timeLeft = 30, running = false, spawnTimer = null, countdownTimer = null, bubbles = [];
+  let score = 0, timeLeft = 30, running = false, spawnTimer = null, countdownTimer = null;
 
   function randRange(a,b){ return a + Math.random()*(b-a); }
 
@@ -655,7 +719,6 @@ mainNav.querySelectorAll('a').forEach(a => a.addEventListener('click', ()=> main
     }
     b.addEventListener('click', pop);
     b.addEventListener('touchstart', pop, {passive:true});
-    bubbles.push(b);
   }
 
   function tickSpawn(){
